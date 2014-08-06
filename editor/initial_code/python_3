@@ -1,11 +1,11 @@
-def checkio(a, b):
-    """
-        sums two passed arguments
-    """
-    return None
+def draw(segments):
+    return []
+
 
 if __name__ == '__main__':
     #These "asserts" using only for self-checking and not necessary for auto-testing
-    assert checkio(3, 2) == 5
-    assert checkio(5, 7) == 12
-    print('Done')
+    assert draw({(1, 2, 1, 5), (1, 2, 7, 2), (1, 5, 4, 7), (4, 7, 7, 5)}) == ((7, 2), (1, 2), (1, 5), (4, 7), (7, 5))
+    assert draw(
+        {(1, 2, 1, 5), (1, 2, 7, 2), (1, 5, 4, 7), (4, 7, 7, 5), (7, 5, 7, 2), (1, 5, 7, 1), (7, 5, 1, 2)}) == []
+    assert draw({(1, 2, 1, 5), (1, 2, 7, 2), (1, 5, 4, 7), (4, 7, 7, 5), (7, 5, 7, 2), (1, 5, 7, 1), (7, 5, 1, 2),
+                 (1, 5, 7, 5)}) == ((7, 2), (1, 2), (1, 5), (4, 7), (7, 5), (7, 2), (1, 5), (7, 5), (1, 2))

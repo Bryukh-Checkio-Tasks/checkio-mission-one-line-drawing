@@ -1,44 +1,66 @@
-<p>
-    <i>( Describe task in general )</i>
+<p class="story">
+    Bla bla Leonardo.
 </p>
 
 <p>
-    Sum two passed ints
+    Our Robots would be artists too. But as first they need practice to control left hand manipulators for smooth motions.
+    For exercise they use to draw various figures with one rule -- <strong>don't lift your pen</strong>.
 </p>
 
+<p>
+    A figure is represented as a set of segments in the rectangular coordinate system.
+    Each segment is represented as a sequence of 4 numbers:
+    (x<sub>1</sub>,&nbsp;y<sub>1</sub>,&nbsp;x<sub>2</sub>,&nbsp;y<sub>2</sub>),
+    where x<sub>1</sub>,&nbsp;y<sub>1</sub> are coordinates for the first end and
+    x<sub>2</sub>,&nbsp;y<sub>2</sub> -- for the second.
+    Segments are undirected. All points in a figure are connected, so you can reach each point from any point.
+</p>
+
+<p>
+    You should find a path to draw the figure. You can pass each segment only once and don't lift your pen.
+    The result must be represented as a sequence of points (tuples with coordinates) in the order how your pen is moving.
+    The path can be started and ended in any points. If it's impossible to draw a figure then return an empty sequence.
+    Let's look at examples.
+</p>
 <p style="text-align: center;">
-    <img class="for_info_only" title="example" src="{{MEDIA}}example.png" alt="example" width="392px"/>
-    <img class="for_editor_only" title="example" src="{{MEDIA}}example.png" alt="example" width="380px"/>
-</p>
-
-<p><i>( Explain input and output values )</i></p>
-<p>
-    <strong>Input: </strong> Two arguments. Both are int
+    <img class="for_info_only" title="figures" src="{{MEDIA}}figures.png" alt="figures" width="600px"/>
+    <img class="for_editor_only" title="figures" src="{{MEDIA}}figures.png" alt="figures" width="380px"/>
 </p>
 
 <p>
-    <strong>Output: </strong> Int. 
+    Example 1: the figure is represented as {(1,2,1,5),(1,2,7,2),(1,5,4,7),(4,7,7,5)} and can be
+    two path - ((7,2),(1,2),(1,5),(4,7),(7,5)) or ((7,5),(4,7),(1,5),(1,2),(7,2)).<br>
+    Example 2: the figure {(1,2,1,5),(1,2,7,2),(1,5,4,7),(4,7,7,5),(7,5,7,2),(1,5,7,1),(7,5,1,2)}
+    can not be drawn with the given rules so results is an empty list or tuple.<br>
+    Example 3: it's like fig.2 but with one more segment (1,5,7,5) and can be drawn several ways.
+    One of them ((7,2),(1,2),(1,5),(4,7),(7,5),(7,2),(1,5),(7,5),(1,2)).
+</p>
+<p>
+    <strong>Input: </strong> Figure segments as a set of tuples with 4 integers each.
+</p>
+
+<p>
+    <strong>Output: </strong> The path as a list or tuple of tuples with 2 integers each.
 </p>
 
 
 
 <div class="for_info_only">
-    <p><i>( Put some usage examples )</i></p>
     <p>
         <strong>Example:</strong>
     </p>
     <pre class="brush: python">
-checkio(3, 2) == 5
-checkio(5, 7) == 12
+draw({(1,2,1,5),(1,2,7,2),(1,5,4,7),(4,7,7,5)}) == ((7,2),(1,2),(1,5),(4,7),(7,5))
+draw({(1,2,1,5),(1,2,7,2),(1,5,4,7),(4,7,7,5),(7,5,7,2),(1,5,7,1),(7,5,1,2)}) == []
+draw({(1,2,1,5),(1,2,7,2),(1,5,4,7),(4,7,7,5),(7,5,7,2),(1,5,7,1),(7,5,1,2),(1,5,7,5)}) == ((7,2),(1,2),(1,5),(4,7),(7,5),(7,2),(1,5),(7,5),(1,2))
+
     </pre>
 </div>
 
 <p class="for_info_only">
     <strong>How it is used: </strong>
-    <i>(Here you can explain how it can be used in development and what is usage of this.)</i>
 </p>
 
 <p>
     <strong>Precondition:</strong>
-    <i>Constraints for Input</i>
 </p>
