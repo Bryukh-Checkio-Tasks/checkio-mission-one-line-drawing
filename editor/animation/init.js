@@ -1,6 +1,6 @@
 //Dont change it
-requirejs(['ext_editor_1', 'jquery_190', 'raphael_210'],
-    function (ext, $, TableComponent) {
+requirejs(['ext_editor_1', 'jquery_190', 'raphael_210', 'snap.svg_030'],
+    function (ext, $, Raphael, Snap) {
 
         var cur_slide = {};
 
@@ -8,7 +8,9 @@ requirejs(['ext_editor_1', 'jquery_190', 'raphael_210'],
         });
 
         ext.set_process_in(function (this_e, data) {
+            cur_slide = {};
             cur_slide["in"] = data[0];
+            this_e.addAnimationSlide(cur_slide);
         });
 
         ext.set_process_out(function (this_e, data) {
@@ -17,8 +19,6 @@ requirejs(['ext_editor_1', 'jquery_190', 'raphael_210'],
 
         ext.set_process_ext(function (this_e, data) {
             cur_slide.ext = data;
-            this_e.addAnimationSlide(cur_slide);
-            cur_slide = {};
         });
 
         ext.set_process_err(function (this_e, data) {
@@ -40,13 +40,15 @@ requirejs(['ext_editor_1', 'jquery_190', 'raphael_210'],
             }
 
             //YOUR FUNCTION NAME
-            var fname = 'checkio';
+            var fname = 'draw';
 
             var checkioInput = data.in;
-            var checkioInputStr = fname + '(' + JSON.stringify(checkioInput)  + ')';
+            var checkioInputStr = fname + '(' +
+                JSON.stringify(checkioInput).replace(/\[/g, "(").replace(/]/g, ")").replace("((", "{(").replace("))", ")}")
+                + ')';
 
-            var failError = function(dError) {
-                $content.find('.call').html('Fail: ' + checkioInputStr);
+            var failError = function (dError) {
+                $content.find('.call').html(checkioInputStr);
                 $content.find('.output').html(dError.replace(/\n/g, ","));
 
                 $content.find('.output').addClass('error');
@@ -66,28 +68,36 @@ requirejs(['ext_editor_1', 'jquery_190', 'raphael_210'],
                 return false;
             }
 
-            var rightResult = data.ext["answer"];
-            var userResult = data.out;
-            var result = data.ext["result"];
-            var result_addon = data.ext["result_addon"];
+            $content.find('.call').html(checkioInputStr);
+            $content.find('.output').html('Working...');
 
+            var svg = new ExpDraw($content.find(".explanation svg")[0]);
+            svg.prepare(checkioInput);
 
-            //if you need additional info from tests (if exists)
-            var explanation = data.ext["explanation"];
+            if (data.ext) {
+                var rightResult = data.ext["answer"];
+                var userData = data.out;
+                var userResult = userData[0];
+                var userResultStr = userData[1];
+                var result = data.ext["result"];
+                var result_addon = data.ext["result_addon"];
+                var result_message = result_addon[1];
+                var result_show = result_addon[0];
 
-            $content.find('.output').html('&nbsp;Your result:&nbsp;' + JSON.stringify(userResult));
-
-            if (!result) {
-                $content.find('.call').html('Fail: ' + checkioInputStr);
-                $content.find('.answer').html('Right result:&nbsp;' + JSON.stringify(rightResult));
-                $content.find('.answer').addClass('error');
-                $content.find('.output').addClass('error');
-                $content.find('.call').addClass('error');
+                //if you need additional info from tests (if exists)
+                var explanation = data.ext["explanation"];
+                $content.find('.output').html('&nbsp;Your result:&nbsp;' + userResultStr);
+                if (!result) {
+                    $content.find('.answer').html(result_message);
+                    $content.find('.answer').addClass('error');
+                    $content.find('.output').addClass('error');
+                    $content.find('.call').addClass('error');
+                }
             }
             else {
-                $content.find('.call').html('Pass: ' + checkioInputStr);
                 $content.find('.answer').remove();
             }
+
 
             //Your code here about test explanation animation
             //$content.find(".explanation").html("Something text for example");
@@ -115,28 +125,68 @@ requirejs(['ext_editor_1', 'jquery_190', 'raphael_210'],
 //                this_e.sendToConsoleCheckiO("something");
 //            });
 //        });
+        function ExpDraw(dom) {
+            var colorOrange4 = "#F0801A";
+            var colorOrange3 = "#FA8F00";
+            var colorOrange2 = "#FAA600";
+            var colorOrange1 = "#FABA00";
 
-        var colorOrange4 = "#F0801A";
-        var colorOrange3 = "#FA8F00";
-        var colorOrange2 = "#FAA600";
-        var colorOrange1 = "#FABA00";
+            var colorBlue4 = "#294270";
+            var colorBlue3 = "#006CA9";
+            var colorBlue2 = "#65A1CF";
+            var colorBlue1 = "#8FC7ED";
 
-        var colorBlue4 = "#294270";
-        var colorBlue3 = "#006CA9";
-        var colorBlue2 = "#65A1CF";
-        var colorBlue1 = "#8FC7ED";
+            var colorGrey4 = "#737370";
+            var colorGrey3 = "#9D9E9E";
+            var colorGrey2 = "#C5C6C6";
+            var colorGrey1 = "#EBEDED";
 
-        var colorGrey4 = "#737370";
-        var colorGrey3 = "#9D9E9E";
-        var colorGrey2 = "#C5C6C6";
-        var colorGrey1 = "#EBEDED";
+            var colorWhite = "#FFFFFF";
 
-        var colorWhite = "#FFFFFF";
-        //Your Additional functions or objects inside scope
-        //
-        //
-        //
+            var p = 20;
 
+            var minX = Infinity,
+                minY = Infinity,
+                maxX = 0,
+                maxY = 0;
+
+            var cell;
+
+            var paper;
+
+            var sizeX = 380;
+            var sizeY = 380;
+
+            var attrShadow = {stroke: colorGrey4, strokeWidth: 3, strokeLinecap: "round"};
+
+            this.prepare = function(lines) {
+                for (var i = 0; i < lines.length; i++) {
+                    var line = lines[i];
+                    minX = Math.min(minX, line[0], line[2]);
+                    maxX = Math.max(maxX, line[0], line[2]);
+                    minY = Math.min(minY, line[1], line[3]);
+                    maxY = Math.max(maxY, line[1], line[3]);
+                }
+                var diff = Math.max(maxY - minY, maxX - minX);
+                cell = (sizeX - 2 * p) / diff;
+                paper = Snap(dom);
+                sizeY = p * 2 + cell * (maxY - minY);
+                paper.attr({width: sizeX, height: sizeY});
+
+                for (i = 0; i < lines.length; i++) {
+                    var segm = lines[i];
+                    paper.line(
+                        (segm[0] - minX) * cell + p,
+                        sizeY - (segm[1] - minY) * cell - p,
+                        (segm[2] - minX) * cell + p,
+                        sizeY - (segm[3] - minY) * cell - p).attr(attrShadow);
+                }
+
+            }
+
+
+
+        }
 
     }
 );
