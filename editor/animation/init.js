@@ -74,6 +74,7 @@ requirejs(['ext_editor_1', 'jquery_190', 'raphael_210', 'snap.svg_030'],
             var svg = new ExpDraw($content.find(".explanation svg")[0]);
             svg.prepare(checkioInput);
 
+
             if (data.ext) {
                 var rightResult = data.ext["answer"];
                 var userData = data.out;
@@ -92,6 +93,9 @@ requirejs(['ext_editor_1', 'jquery_190', 'raphael_210', 'snap.svg_030'],
                     $content.find('.answer').addClass('error');
                     $content.find('.output').addClass('error');
                     $content.find('.call').addClass('error');
+                }
+                if (result_show) {
+                    svg.animateLines(userResult);
                 }
             }
             else {
@@ -157,9 +161,10 @@ requirejs(['ext_editor_1', 'jquery_190', 'raphael_210', 'snap.svg_030'],
             var sizeX = 380;
             var sizeY = 380;
 
-            var attrShadow = {stroke: colorGrey4, strokeWidth: 3, strokeLinecap: "round"};
+            var attrShadow = {stroke: colorGrey4, strokeWidth: 4, strokeLinecap: "round"};
+            var attrLine = {stroke: colorOrange4, strokeWidth: 2, strokeLinecap: "round"};
 
-            this.prepare = function(lines) {
+            this.prepare = function (lines) {
                 for (var i = 0; i < lines.length; i++) {
                     var line = lines[i];
                     minX = Math.min(minX, line[0], line[2]);
@@ -182,11 +187,38 @@ requirejs(['ext_editor_1', 'jquery_190', 'raphael_210', 'snap.svg_030'],
                         sizeY - (segm[3] - minY) * cell - p).attr(attrShadow);
                 }
 
-            }
+            };
 
+            this.animateLines = function (points) {
+                var count = 0;
+                var stepTime = 2;
+                (function draw() {
+                    if (count >= points.length - 1) {
+                        return false;
+                    }
+                    var f = points[count];
+                    var s = points[count + 1];
+                    var segm = paper.path(Snap.format(
+                        "M{f0},{f1}L{f0},{f1}",
+                        {
+                            f0: (f[0] - minX) * cell + p,
+                            f1: sizeY - (f[1] - minY) * cell - p})).attr(attrLine);
+                var dist = Math.sqrt(Math.pow(f[0] - s[0], 2) + Math.pow(f[1] - s[1], 2)) * cell;
+                segm.animate(
+                    {"path": Snap.format("M{f0},{f1}L{s0},{s1}",
+                        {
+                            f0: (f[0] - minX) * cell + p,
+                            f1: sizeY - (f[1] - minY) * cell - p,
+                            s0: (s[0] - minX) * cell + p,
+                            s1: sizeY - (s[1] - minY) * cell - p})}, dist * stepTime,
+                    callback = function(){count++; draw()});
 
-
+            }()
+        )
+            ;
         }
-
     }
-);
+
+}
+)
+;
