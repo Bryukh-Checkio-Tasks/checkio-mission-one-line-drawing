@@ -1,10 +1,27 @@
-<p class="story">
-    Bla bla Leonardo.
-</p>
+<style>
+    .quote-source {
+        float: right;
+        font-size: 12px;
+    }
+</style>
+
+<div class="story">
+    <p>“The line that describes the beautiful is elliptical.
+        It has simplicity and constant change. It cannot be described by a compass,
+        and it changes direction at every one of its points.”</p>
+
+    <p class="quote-source">Rudolf Arnheim</p>
+
+    <div style="clear: both;"></div>
+    <p>Leonardo da Vinci, Raphael, Michelangelo,
+        Albrecht Dürer, M.C. Escher, Hans Holbein, Paul Klee, LeRoy Neiman. All of these famous artists were left handed.</p>
+</div>
 
 <p>
-    Our Robots would be artists too. But as first they need practice to control left hand manipulators for smooth motions.
-    For exercise they use to draw various figures with one rule -- <strong>don't lift your pen</strong>.
+    Our Robots have been spending some time researching the great artists
+    from the Human civilization and would like to learn some of the fundamentals of art.
+    For their first lesson, they need to learn to control their left hand-manipulators well enough to make smooth motions.
+    For this exercise, they have decided to draw various figures on graph paper with an extra challenge rule -- <strong>don't lift your pen</strong>.
 </p>
 
 <p>
@@ -17,10 +34,11 @@
 </p>
 
 <p>
-    You should find a path to draw the figure. You can pass each segment only once and don't lift your pen.
-    The result must be represented as a sequence of points (tuples with coordinates) in the order how your pen is moving.
-    The path can be started and ended in any points. If it's impossible to draw a figure then return an empty sequence.
-    Let's look at examples.
+    You should find a path in order to draw the figure.
+    You can pass through each segment only once and are not allowed to lift the pen.
+    The result must be represented as a sequence of points (tuples with coordinates)
+    in the order of how the pen moves to create the drawing. The path may be started and ended at any point.
+    If it's impossible to draw a figure then return an empty sequence. Let's look at some examples:
 </p>
 <p style="text-align: center;">
     <img class="for_info_only" title="figures" src="{{MEDIA}}figures.png" alt="figures" width="600px"/>
@@ -31,7 +49,7 @@
     Example 1: the figure is represented as {(1,2,1,5),(1,2,7,2),(1,5,4,7),(4,7,7,5)} and can be
     two path - ((7,2),(1,2),(1,5),(4,7),(7,5)) or ((7,5),(4,7),(1,5),(1,2),(7,2)).<br>
     Example 2: the figure {(1,2,1,5),(1,2,7,2),(1,5,4,7),(4,7,7,5),(7,5,7,2),(1,5,7,2),(7,5,1,2)}
-    can not be drawn with the given rules so results is an empty list or tuple.<br>
+    can not be drawn with the given rules, so the result is an empty list or tuple.<br>
     Example 3: it's like fig.2 but with one more segment (1,5,7,5) and can be drawn several ways.
     One of them ((7,2),(1,2),(1,5),(4,7),(7,5),(7,2),(1,5),(7,5),(1,2)).
 </p>
@@ -59,9 +77,12 @@ draw({(1,2,1,5),(1,2,7,2),(1,5,4,7),(4,7,7,5),(7,5,7,2),(1,5,7,2),(7,5,1,2),(1,5
 
 <p class="for_info_only">
     <strong>How it is used: </strong>
+     This mission illustrates the basics of computer generated vector graphics.
+    The same principles may also be applied to AI pathfinding and topological work.
 </p>
 
 <p>
     <strong>Precondition:</strong><br>
-    0 &lt; len(segments) &lt; 30
+    0 &lt; len(segments) &lt; 30<br>
+    all(all(0 &lt; x &lt; 100 for x in s) for s in segments)
 </p>
