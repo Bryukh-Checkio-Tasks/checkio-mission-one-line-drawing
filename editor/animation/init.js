@@ -161,7 +161,7 @@ requirejs(['ext_editor_1', 'jquery_190', 'raphael_210', 'snap.svg_030'],
             var sizeX = 380;
             var sizeY = 380;
 
-            var attrShadow = {stroke: colorGrey4, strokeWidth: 5, strokeLinecap: "round"};
+            var attrShadow = {stroke: colorOrange2, strokeWidth: 5, strokeLinecap: "round"};
             var attrLine = {stroke: colorBlue4, strokeWidth: 2, strokeLinecap: "round"};
 
             this.prepare = function (lines) {
