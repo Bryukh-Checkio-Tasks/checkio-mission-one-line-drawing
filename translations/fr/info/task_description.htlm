@@ -1,0 +1,93 @@
+<style>
+    .quote-source {
+        float: right;
+        font-size: 12px;
+    }
+</style>
+
+<div class="story">
+    <p>“La courbe qui décrit la beauté est elliptique.
+    Elle est simple et évolue sans arrêt.
+    Elle ne peut pas être tracée au compas, et elle change de direction en chacun de ses points.”</p>
+    <p class="quote-source">Rudolf Arnheim</p>
+
+    <div style="clear: both;"></div>
+    <p>Leonardo da Vinci, Raphael, Michelangelo,
+        Albrecht Dürer, M.C. Escher, Hans Holbein, Paul Klee, LeRoy Neiman. Tous ces artistes remarquables étaient gauchers.</p>
+</div>
+
+<p>
+    Nos robots ont passé du temps à rechercher les grands artistes de la civilation humaine, 
+    et aimeraient se cultiver à propos des fondements des arts.
+    Pour leur premier cours, ils doivent apprendre à contrôler parfaitement leur bras-manipulateur gauche,
+    pour réaliser des mouvements de haute précision.
+    Pour s'exercer, ils ont décidé de tracer différentes figures sur papier millimétré, avec une contrainte supplémentaire:
+    <strong>ne pas lever le stylo</strong>.
+</p>
+
+<p>
+    Une figure est constituée d'un ensemble de segments tracés sur une feuille quadrillée. 
+    Chaque segment est représenté par une suite de 4 nombres:
+    (x<sub>1</sub>,&nbsp;y<sub>1</sub>,&nbsp;x<sub>2</sub>,&nbsp;y<sub>2</sub>),
+    where (x<sub>1</sub>,&nbsp;y<sub>1</sub>) sont les coordonnées de la première extrémité, et
+    (x<sub>2</sub>,&nbsp;y<sub>2</sub>) celles de la seconde extrémité.
+    Les segments ne sont pas orientés (et peuvent donc être dessinés dans le sens que l'on veut). 
+    Tous les points de la figure sont reliés, c'est à dire que l'on peut atteindre tout point de la figure
+    à partir de tout autre point de la figure en suivant une ligne de la figure.
+</p>
+
+<p>
+    Il faut trouver dans quel ordre tracer les segments pour faire la figure.
+    Chaque segment ne peut être tracé qu'un seule fois, et il ne faut pas lever le stylo.
+    Le résultat sera représenté par une séquence de points (tuples de couples de coordonnées)
+    que doit relier linéairement le stylo dans l'ordre pour former la figure.
+    Le chemin peut commencer et terminer par le point de votre choix.
+    S'il n'est pas possible de tracer une figure, alors retourner une liste vide.
+    Obervons quelques exemples:
+</p>
+<p style="text-align: center;">
+    <img class="for_info_only" title="figures" src="{{MEDIA}}figures.png" alt="figures" width="600px"/>
+    <img class="for_editor_only" title="figures" src="{{MEDIA}}figures.png" alt="figures" width="380px"/>
+</p>
+
+<p>
+    Exemple 1: la figure est représentée par {(1,2,1,5),(1,2,7,2),(1,5,4,7),(4,7,7,5)} 
+    et il y a deux chemins possibles - ((7,2),(1,2),(1,5),(4,7),(7,5)) ou ((7,5),(4,7),(1,5),(1,2),(7,2)).<br>
+    Exemple 2: la figure {(1,2,1,5),(1,2,7,2),(1,5,4,7),(4,7,7,5),(7,5,7,2),(1,5,7,2),(7,5,1,2)}
+    ne peut pas être tracée avec les règles imposées, donc le résultat sera une liste (ou un tuple) vide.<br>
+    Exemple 3: ressemble à la figure fig.2, mais avec un segment supplémentaire (1,5,7,5),
+    et peut être tracée de plusieurs façons, comme par exemple: ((7,2),(1,2),(1,5),(4,7),(7,5),(7,2),(1,5),(7,5),(1,2)).
+</p>
+<p>
+    <strong>Input: </strong>Les segments de la figure, comme ensemble (set) de tuples de 4 entiers (int) chacun.
+</p>
+
+<p>
+    <strong>Output: </strong>Le chemin, comme liste ou tuple de tuples de deux entiers chacun.
+</p>
+
+
+
+<div class="for_info_only">
+    <p>
+        <strong>Exemple:</strong>
+    </p>
+    <pre class="brush: python">
+draw({(1,2,1,5),(1,2,7,2),(1,5,4,7),(4,7,7,5)}) == ((7,2),(1,2),(1,5),(4,7),(7,5))
+draw({(1,2,1,5),(1,2,7,2),(1,5,4,7),(4,7,7,5),(7,5,7,2),(1,5,7,2),(7,5,1,2)}) == []
+draw({(1,2,1,5),(1,2,7,2),(1,5,4,7),(4,7,7,5),(7,5,7,2),(1,5,7,2),(7,5,1,2),(1,5,7,5)}) == ((7,2),(1,2),(1,5),(4,7),(7,5),(7,2),(1,5),(7,5),(1,2))
+
+    </pre>
+</div>
+
+<p class="for_info_only">
+    <strong>Application: </strong>
+    Cette mission illustre les bases du dessin vectoriel assité par ordinateur.
+    Les même principes peuvent être appliqués à le recherche de chemin (pathfinding) ou en topologie.
+</p>
+
+<p>
+    <strong>Préconditions:</strong><br>
+    0 &lt; len(segments) &lt; 30<br>
+    all(all(0 &lt; x &lt; 100 for x in s) for s in segments)
+</p>
